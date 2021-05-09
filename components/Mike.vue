@@ -33,9 +33,13 @@
       <b-button @click="startRecognation()" :disabled="timer !== null"
         >開始</b-button
       >
-      <b-button @click="stopRecognation()" :disabled="!timer">終了</b-button>
+      <b-button
+        @click="stopRecognation(Math.round((count / time) * 100) / 100)"
+        :disabled="!timer"
+        >終了</b-button
+      >
     </div>
-    <div v-if="canFlag">
+    <div>
       <table class="table">
         <tr>
           <td colspan="3">
@@ -46,10 +50,17 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr v-if="canFlag">
           <td>秒速{{ Math.round((count / time) * 100) / 100 }}文字</td>
           <td>読み上げ済：{{ count }}文字</td>
           <td>経過時間：{{ time }}秒</td>
+        </tr>
+        <tr v-else>
+          <td>経過時間：{{ time }}秒</td>
+          <td v-if="count !== 0">
+            秒速{{ Math.round((count / time) * 100) / 100 }}文字
+          </td>
+          <td v-else>健闘を祈ります</td>
         </tr>
       </table>
       <div>
@@ -60,19 +71,6 @@
           :fields="['text', 'time']"
         ></b-table>
       </div>
-    </div>
-    <div v-else>
-      <table class="table">
-        <tbody>
-          <tr>
-            <td>経過時間：{{ time }}秒</td>
-            <td v-if="count !== 0">
-              秒速{{ Math.round((count / time) * 100) / 100 }}文字
-            </td>
-            <td v-else>健闘を祈ります</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
@@ -128,12 +126,23 @@ export default {
     },
 
     // 計測終了
-    stopRecognation() {
+    stopRecognation(sp) {
       if (this.canFlag) this.recognition.stop();
       clearInterval(this.timer);
       this.timer = null;
-      this.text = "お疲れさまでした";
       if (!this.canFlag) this.count = this.childText.length;
+      const ansdat =
+        sp < 3
+          ? "ゆっくり"
+          : sp < 4.5
+          ? "少しゆっくり"
+          : sp < 5.5
+          ? "理想的"
+          : sp < 7
+          ? "少し早口"
+          : "早口";
+
+      this.text = `お疲れさまでした。貴方のスピーチは${ansdat}かもしれません`;
     },
 
     // 経過時間取得
