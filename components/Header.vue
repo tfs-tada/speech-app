@@ -7,7 +7,7 @@
       <b-nav pills fill>
         <b-nav-item :active="isActive('/')" to="/"> 速度計測 </b-nav-item>
         <b-nav-item :active="isActive('/howto')" to="/howto">使い方</b-nav-item>
-        <b-nav-item :active="isActive('/note')" to="note">注意事項</b-nav-item>
+        <b-nav-item :active="isActive('/note')" to="/note">注意事項</b-nav-item>
       </b-nav>
     </div>
   </div>
