@@ -41,7 +41,7 @@
           <td colspan="3">
             <div style="color: gray">
               <span v-show="text.length === 0">
-                開始ボタンを押して測定を開始します"
+                *開始ボタンを押して測定を開始します*
               </span>
               {{ text }}
             </div>
@@ -118,7 +118,7 @@ export default {
       }, 10);
       this.results = [];
       this.count = 0;
-      this.text = "測定中です。原稿を読み終えたら終了ボタンを押してください";
+      this.text = "*測定中です。原稿を読み終えたら終了ボタンを押してください*";
       if (this.canFlag) this.recognition.start();
     },
 
@@ -140,7 +140,7 @@ export default {
           ? "少し早口"
           : "早口";
 
-      this.text = `お疲れさまでした。貴方のスピーチ速度は${ansdat}かもしれません`;
+      this.text = `*お疲れさまでした。貴方のスピーチ速度は${ansdat}かもしれません*`;
     },
 
     // 経過時間取得
@@ -164,7 +164,6 @@ export default {
     let localCount = 0;
     let startTime = null;
     this.recognition.onresult = (event) => {
-      if (this.timer === null) return;
       if (!startTime) {
         startTime = new Date();
         localCount = 0;
@@ -183,6 +182,7 @@ export default {
           startTime = null;
           localCount += transcript.length;
         } else {
+          if (this.timer === null) return;
           this.text = transcript;
         }
       }
