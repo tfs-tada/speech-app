@@ -1,15 +1,30 @@
 <template>
   <div>
-	  <table class="table">
-		  <tbody>
-			  <th colspan="2">スピーチ速度目安</th>
-			  <tr><td>秒速~3文字</td><td>ゆっくり</td></tr>
-			  <tr><td>秒速3~4.5文字</td><td>すこしゆっくり</td></tr>
-			  <tr><td>秒速4.5~5.5文字</td><td>適切</td></tr>
-			  <tr><td>秒速5.5~7文字</td><td>すこし早口</td></tr>
-			  <tr><td>秒速7文字~</td><td>早口</td></tr>
-		  </tbody>
-	  </table>
+    <table class="table">
+      <tbody>
+        <th colspan="2">スピーチ速度目安</th>
+        <tr>
+          <td>秒速~3文字</td>
+          <td>ゆっくり</td>
+        </tr>
+        <tr>
+          <td>秒速3~4.5文字</td>
+          <td>すこしゆっくり</td>
+        </tr>
+        <tr>
+          <td>秒速4.5~5.5文字</td>
+          <td>適切</td>
+        </tr>
+        <tr>
+          <td>秒速5.5~7文字</td>
+          <td>すこし早口</td>
+        </tr>
+        <tr>
+          <td>秒速7文字~</td>
+          <td>早口</td>
+        </tr>
+      </tbody>
+    </table>
     <SampleText
       :color="getColor(Math.round((count / time) * 100) / 100)"
       @getString="getString"
@@ -142,7 +157,10 @@ export default {
     let localCount = 0;
     let startTime = null;
     this.recognition.onresult = (event) => {
-      if (!startTime) startTime = new Date();
+      if (!startTime) {
+        startTime = new Date();
+        localCount = 0;
+      }
       for (let i = event.resultIndex; i < event.results.length; i++) {
         let transcript = event.results[i][0].transcript;
 
