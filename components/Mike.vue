@@ -33,20 +33,21 @@
       <b-button @click="startRecognation()" :disabled="timer !== null"
         >開始</b-button
       >
-      <b-button
-        @click="stopRecognation(Math.round((count / time) * 100) / 100)"
-        :disabled="!timer"
-        >終了</b-button
-      >
+      <b-button @click="stopRecognation()" :disabled="!timer">終了</b-button>
     </div>
     <div>
       <table class="table">
         <tr>
           <td colspan="3">
             <div style="color: gray">
-              <span v-show="text.length === 0"
-                >*ここに現在の入力が表示されます*</span
-              >{{ text }}
+              <span v-show="text.length === 0">
+                {{
+                  canFlag
+                    ? "*ここに現在の入力が表示されます*"
+                    : "開始ボタンを押して測定を開始します"
+                }}
+              </span>
+              {{ text }}
             </div>
           </td>
         </tr>
@@ -63,7 +64,7 @@
           <td v-else>健闘を祈ります</td>
         </tr>
       </table>
-      <div>
+      <div v-show="canFlag">
         <b-table
           striped
           hover
@@ -121,16 +122,17 @@ export default {
       }, 10);
       this.results = [];
       this.count = 0;
-      this.text = "";
+      this.text = "測定中です。原稿を読み終えたら終了ボタンを押してください";
       if (this.canFlag) this.recognition.start();
     },
 
     // 計測終了
-    stopRecognation(sp) {
+    stopRecognation() {
       if (this.canFlag) this.recognition.stop();
       clearInterval(this.timer);
       this.timer = null;
       if (!this.canFlag) this.count = this.childText.length;
+      const sp = Math.round((this.count / this.time) * 100) / 100;
       const ansdat =
         sp < 3
           ? "ゆっくり"
@@ -142,7 +144,7 @@ export default {
           ? "少し早口"
           : "早口";
 
-      this.text = `お疲れさまでした。貴方のスピーチは${ansdat}かもしれません`;
+      this.text = `お疲れさまでした。貴方のスピーチ速度は${ansdat}かもしれません`;
     },
 
     // 経過時間取得
@@ -166,6 +168,7 @@ export default {
     let localCount = 0;
     let startTime = null;
     this.recognition.onresult = (event) => {
+      if (this.timer === null) return;
       if (!startTime) {
         startTime = new Date();
         localCount = 0;
