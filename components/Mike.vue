@@ -85,6 +85,7 @@ export default {
         },
       ],
       count: 0,
+	  finishcount:0,
       startTime: null,
       time: 0,
       text: "",
@@ -118,6 +119,7 @@ export default {
       }, 10);
       this.results = [];
       this.count = 0;
+	  this.finishcount = 0
       this.text = "*測定中です。原稿を読み終えたら終了ボタンを押してください*";
       if (this.canFlag) this.recognition.start();
     },
@@ -161,17 +163,16 @@ export default {
 
     // 入力を受けたら発火
     // 入力された音声を処理
-    let localCount = 0;
+    this.finishcount = 0;
     let startTime = null;
     this.recognition.onresult = (event) => {
       if (!startTime) {
         startTime = new Date();
-        localCount = 0;
       }
       for (let i = event.resultIndex; i < event.results.length; i++) {
         let transcript = event.results[i][0].transcript;
 
-        this.count = localCount + transcript.length;
+        this.count = this.finishcount + transcript.length;
         if (event.results[i].isFinal) {
           const datTime = Math.round((new Date() - startTime) / 10) / 100;
           const newText = {
@@ -180,7 +181,7 @@ export default {
           };
           this.results.push(newText);
           startTime = null;
-          localCount += transcript.length;
+          this.finishcount += transcript.length;
         } else {
           if (this.timer === null) return;
           this.text = transcript;
