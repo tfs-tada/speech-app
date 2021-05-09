@@ -13,12 +13,6 @@ export default {
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/speech/favicon.ico' }
 		],
-		base: {
-			href: 'router.base'
-		}
-	},
-	router: {
-		base: "/speech/"
 	},
 	generate: {
 		dir: 'speech'
@@ -53,8 +47,8 @@ export default {
 			name: 'speech-app',
 			title: 'speech-app',
 			lang: 'ja',
-			start_url: '/speech/',
-			scope: '/speech/'
+			start_url: '/',
+			scope: '/'
 		}
 	},
 
