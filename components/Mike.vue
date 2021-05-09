@@ -41,11 +41,7 @@
           <td colspan="3">
             <div style="color: gray">
               <span v-show="text.length === 0">
-                {{
-                  canFlag
-                    ? "*ここに現在の入力が表示されます*"
-                    : "開始ボタンを押して測定を開始します"
-                }}
+                開始ボタンを押して測定を開始します"
               </span>
               {{ text }}
             </div>
